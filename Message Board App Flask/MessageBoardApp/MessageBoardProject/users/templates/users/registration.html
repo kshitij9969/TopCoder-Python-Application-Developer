@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+<div class="container">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.username, class='form-control', placeholder='username')}}
+        {{ wtf.form_field(form.email, class='form-control', placeholder='email')}}
+        {{ wtf.form_field(form.first_name, class='form-control', placeholder='first name')}}
+        {{ wtf.form_field(form.last_name, class='form-control', placeholder='last name')}}
+        {{ wtf.form_field(form.designation, class='form-control', placeholder='designation')}}
+        {{ wtf.form_field(form.password, class='form-control', placeholder='password')}}
+        {{ wtf.form_field(form.confirm_password, class='form-control', placeholder='confirm password')}}
+        {{ wtf.form_field(form.register, class='btn btn-primary')}}
+    </form>
+</div>
+{% endblock %}

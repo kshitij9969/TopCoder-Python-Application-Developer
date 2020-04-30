@@ -1,0 +1,1 @@
+<h1>Thank you for submitting the survey!</h1>

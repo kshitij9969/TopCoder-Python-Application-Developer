@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<div class="container">
+    <div class=”collapse navbar-collapse” id=”navbarCollapse”>
+    <ul class="nav">
+          <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('core.index') }}">Home</a>
+  </li>
+        <!-- Check if user is authenticated  -->
+
+        {% if current_user.is_authenticated %}<!-- first if -->
+
+        <!-- if the user is a project manager -->
+        {% if current_user.designation == 'Project Manager' %}<!-- second if -->
+        <!-- if the user is a project manager and has a project created -->
+        {% if current_user.associated_project_id %} <!-- third if -->
+
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('projects.update_project') }}">Update Project</a>
+  </li>
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('projects.add_associates_to_project') }}">Add associates</a>
+  </li>
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('activity.add_activity') }}">Add activity</a>
+  </li>
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('notification.send_notification') }}">Send Notification</a>
+  </li>
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+  </li>
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('users.view_details') }}">View profile</a>
+  </li>
+{% else %} <!-- third if else-->
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('projects.create_project') }}">Create Project</a>
+  </li>
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+  </li>
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('users.view_details') }}">View profile</a>
+  </li>
+{% endif %} <!-- third if closed -->
+
+
+
+<!--  if the user is associate --->
+<!-- else for second if -->
+{% else %}
+        <!--  if the user is associate and is associated to a project --->
+        {% if current_user.associated_project_id %}<!-- fourth if -->
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for('activity.add_activity') }}">Add activity</a>
+  </li>
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('notification.send_notification') }}">Send Notification</a>
+  </li>
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+  </li>
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('users.view_details') }}">View profile</a>
+  </li>
+        <!--  if the user is associate and is not associated to a project --->
+        {% else %}<!-- else for fourth if -->
+                <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('users.logout') }}">Logout</a>
+  </li>
+        <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('users.view_details') }}">View profile</a>
+  </li>
+{% endif %}<!-- fourth if closed -->
+{% endif %}<!-- second if closed -->
+
+        <!-- User is not authenticated then ask to register or login -->
+        {% else %}<!-- else for first if -->
+  <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('users.user_login') }}">Login</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('users.registration') }}">Register</a>
+  </li>
+        {% endif %}<!-- first if closed -->
+          <li class="nav-item">
+    <a class="nav-link" href="{{ url_for('core.permissions') }}">View permissions</a>
+  </li>
+</ul>
+</div>
+    </div>
+
+{% block content %}
+{% endblock %}
+</body>
+</html>

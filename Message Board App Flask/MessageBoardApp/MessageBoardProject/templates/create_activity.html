@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="container">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.activity_title, class='form-control', placeholder='Activity title')}}
+        {{ wtf.form_field(form.activity_details, class='form-control', placeholder='Activity details')}}
+        {{ wtf.form_field(form.activity_date, class='form-control', placeholder='Activity date')}}
+        {{ wtf.form_field(form.activity_user, class='form-control', placeholder='Activity users')}}
+        {{ wtf.form_field(form.add_activity, class='form-control', placeholder='Activity users')}}
+    </form>
+</div>
+{% endblock %}

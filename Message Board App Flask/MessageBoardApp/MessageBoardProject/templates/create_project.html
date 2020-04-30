@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+<div class="container">
+    <form method="POST" class="form form-horizontal">
+        {{ form.hidden_tag() }}
+        {{ wtf.form_field(form.project_title, class='form-control', placeholder='Project title')}}
+        {{ wtf.form_field(form.project_description, class='form-control', placeholder='Project description')}}
+        {{ wtf.form_field(form.project_start_date, class='form-control', placeholder='Project start date')}}
+        {{ wtf.form_field(form.project_end_date, class='form-control', placeholder='Estimated end date')}}
+        {{ wtf.form_field(form.budget, class='form-control', placeholder='Estimated budget')}}
+        {{ wtf.form_field(form.associates, class='form-control')}}
+        {{ wtf.form_field(form.create_project, class='btn btn-primary')}}
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% block content %}
+<h5>Make sure to visit permissions section.</h5>
+{% if current_user.associated_project_id %}
+<div class="container">
+    <h1>This is your project dashboard.</h1>
+    <div class="row">
+        <h2>Percentage completed</h2>
+        <br>
+        <div class="progress" style="width: 100%">
+          <div class="progress-bar" role="progressbar" style="width: {{present_progress}}%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">{{present_progress}}%</div>
+        </div>
+    </div>
+<h1>Project expected end date: {{ project_details.project_expected_end_date }}</h1>
+    {% if project_status.project_testing %}
+    <h1>Congratulations, the project is complete!</h1>
+    {% else %}
+    <h2>Stages of project</h2>
+    {% endif %}
+    <div class="row">
+        <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Planning</h5>
+        <p class="card-text">Planning Stage</p>
+          {% if project_status.project_planning %}
+          <p class="card-text">Completed</p>
+          {% else %}
+          {% if current_user.designation == 'Project Manager'%}
+        <a href="{{ url_for('projects.update_planning') }}" class="btn btn-primary">Mark as complete</a>
+          {% else %}
+          <p class="card-text">Work in progress</p>
+          {% endif %}
+          {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Design</h5>
+        <p class="card-text">Design Stage</p>
+          {% if project_status.project_design %}
+          <p class="card-text">Completed</p>
+          {% else %}
+        {% if current_user.designation == 'Project Manager'%}
+        <a href="{{ url_for('projects.update_design') }}" class="btn btn-primary">Mark as complete</a>
+          {% else %}
+          <p class="card-text">Work in progress</p>
+          {% endif %}
+          {% endif %}
+      </div>
+    </div>
+  </div>
+<div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Development</h5>
+        <p class="card-text">Development Stage</p>
+          {% if project_status.project_development %}
+          <p class="card-text">Completed</p>
+          {% else %}
+            {% if current_user.designation == 'Project Manager'%}
+        <a href="{{ url_for('projects.update_development') }}" class="btn btn-primary">Mark as complete</a>
+          {% else %}
+          <p class="card-text">Work in progress</p>
+          {% endif %}
+          {% endif %}
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Testing</h5>
+        <p class="card-text">Testing Stage</p>
+          {% if project_status.project_testing %}
+          <p class="card-text">Completed</p>
+          {% else %}
+            {% if current_user.designation == 'Project Manager'%}
+        <a href="{{ url_for('projects.update_testing') }}" class="btn btn-primary">Mark as complete</a>
+          {% else %}
+          <p class="card-text">Work in progress</p>
+          {% endif %}
+          {% endif %}
+      </div>
+    </div>
+  </div>
+
+    </div>
+
+    <div class="row overflow-auto" style="margin:0px; height: 250px">
+        <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Budget</h5>
+        <p class="card-text">Current budget:{{ project_details.project_finance.current_cost  }}</p>
+        <p class="card-text">Estimated budget:{{ project_details.project_finance.current_budget }}</p>
+        <p class="card-text">Budget difference:</p>
+          {% if current_user.designation == 'Project Manager'%}
+        <a href="{{ url_for('projects.update_project') }}" class="btn btn-primary">Update current budget</a>
+            {% endif %}
+      </div>
+    </div>
+  </div>
+        <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+          {% if current_user.designation=='Project Manager' %}
+        <h5 class="card-title">Associates reporting to you</h5>
+          {% else %}
+          <h5 class="card-title">Associates working with you</h5>
+          {% endif %}
+          {% for associates in associates_reporting %}
+          <p class="card-text">{{associates.first_name}} {{associates.last_name}}</p>
+          {% endfor %}
+          {% if current_user.designation == 'Project Manager' %}
+        <a href="{{ url_for('projects.add_associates_to_project') }}" class="btn btn-primary">Add associates</a>
+          {% endif %}
+      </div>
+    </div>
+  </div>
+    </div>
+        <div class="row overflow-auto" style="margin:0px; height: 250px">
+  <div class="col-sm-6">
+
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Notifications</h5>
+        <p class="card-text">Your team interactions</p>
+          {% if notifications %}
+          <ol>
+            {% for notification in notifications %}
+            <li>
+            <p class="card-text">{{notification.subject}}</p>
+            <p class="card-text">{{notification.message}}</p>
+            <p class="card-text">Sent by: {{notification.sender.first_name}}</p>
+            </li>
+            {% endfor %}
+              </ol>
+          {% else %}
+          <h2>No new notifications</h2>
+          {% endif %}
+          {% if notifications_recieved %}
+          <ol>
+            {% for notification in notifications_recieved %}
+            <li>
+            <p class="card-text">{{notification.subject}}</p>
+            <p class="card-text">{{notification.message}}</p>
+            <p class="card-text">Sent by: {{notification.sender.first_name}}</p>
+            </li>
+            {% endfor %}
+          </ol>
+          {% else %}
+          <h2>No new notifications</h2>
+{% endif %}
+        <a href="{{ url_for('notification.send_notification') }}" class="btn btn-primary">Send notification</a>
+      </div>
+    </div>
+  </div>
+
+        <div class="col-sm-6" style="height: 150px; margin: 0px; max-width:100%" class="overflow-auto">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Team activities</h5>
+        <p class="card-text">Your team activities</p>
+          {% if activities %}
+          <ol>
+{% for activity in activities %}
+              <li>
+<p class="card-text">{{activity.activity_title}}</p>
+<p class="card-text">{{activity.activity_description}}</p>
+                  </li>
+{% endfor %}
+</ol>
+{% endif %}
+        <a href="{{ url_for('activity.add_activity') }}" class="btn btn-primary">Create new activity</a>
+      </div>
+    </div>
+        </div>
+</div>
+</div>
+</div>
+{% else %}
+<h1>You are not part of any project.</h1>
+{% endif %}
+<!--{% if project_details %}-->
+<!--<h1>{{project_details}}</h1>-->
+<!--{% endif %}-->
+
+
+<!--{% if project_status %}-->
+<!--<h2>Planning:{{project_status.project_planning}}</h2>-->
+<!--<form method="GET" action="{{ url_for('projects.update_planning') }}">-->
+<!--    <button class="btn btn-primary">Mark as completed</button>-->
+<!--</form>-->
+<!--<h2>Design:{{project_status.project_design}}</h2>-->
+<!--<form method="GET" action="{{ url_for('projects.update_design') }}">-->
+<!--<button class="btn btn-primary">Mark as completed</button>-->
+<!--</form>-->
+<!--<h2>Development:{{project_status.project_development}}</h2>-->
+<!--<form method="GET" action="{{ url_for('projects.update_development') }}">-->
+<!--<button class="btn btn-primary">Mark as completed</button>-->
+<!--</form>-->
+<!--<h2>Testing:{{project_status.project_testing}}</h2>-->
+<!--<form method="GET" action="{{ url_for('projects.update_testing') }}">-->
+<!--<button class="btn btn-primary">Mark as completed</button>-->
+<!--</form>-->
+<!--{% endif %}-->
+
+{% endblock %}
